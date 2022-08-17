@@ -16,7 +16,7 @@ jobs:
   release-prep:
     runs-on: "ubuntu-latest"
     outputs:
-      semver: ${{steps.release.outputs.major}}.${{steps.release.outputs.minor}}.${{steps.release.outputs.patch}}
+      semver: ${{steps.semver.outputs.full}}
       sha: ${{ steps.release.outputs.sha }}
       release_created: ${{ steps.release.outputs.release_created }}
       branch: ${{ steps.branch_names.outputs.current_branch }}
@@ -32,13 +32,27 @@ jobs:
         id: branch_names
         uses: tj-actions/branch-names@v5.4
 
+      - uses: actions/github-script@v6
+        id: semver
+        with:
+          script: |
+            if(${{steps.release.outputs.release_created}}){
+              core.setOutput("full", "${{steps.release.outputs.major}}.${{steps.release.outputs.minor}}.${{steps.release.outputs.patch}}");
+            }
+            else{
+              const regex = /(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(-(?<preRelease>[^+]+))?(\+(?<build>.*))?/
+              const matches = regex.exec(${{ steps.release.outputs.pr.title}})
+              
+              core.info(matches);
+              core.setOutput("full", matches[0]);
+            }
+
       - name: data
         run: |
-          echo "semver ${{steps.release.outputs.semver}}"
+          echo "semver ${{steps.semver.outputs.full}}"
           echo "sha ${{steps.release.outputs.sha}}"
           echo "release_created ${{steps.release.outputs.release_created}}"
           echo "branch ${{steps.release.outputs.branch}}"
-          echo "pr ${{toJSON(steps.release.outputs)}}"
 
   build:
     name: build
