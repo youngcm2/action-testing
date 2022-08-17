@@ -38,7 +38,7 @@ jobs:
           echo "sha ${{steps.release.outputs.sha}}"
           echo "release_created ${{steps.release.outputs.release_created}}"
           echo "branch ${{steps.release.outputs.branch}}"
-          echo "branch ${{steps.release.outputs.pr}}"
+          echo "pr '${{steps.release.outputs.pr}}'"
 
   build:
     name: build
