@@ -51,9 +51,10 @@ jobs:
       - name: data
         run: |
           echo "${{matrix.image_name}}"
-          echo "${{needs.release-prep.outputs.semver}}"
-          echo "${{needs.release-prep.outputs.sha}}"
-          echo "${{needs.release-prep.outputs.release_created}}"
+          echo "semver ${{needs.release-prep.outputs.semver}}"
+          echo "sha ${{needs.release-prep.outputs.sha}}"
+          echo "release_created ${{needs.release-prep.outputs.release_created}}"
+          echo "branch ${{needs.release-prep.outputs.branch}}"
 
   publish:
     runs-on: "ubuntu-latest"
@@ -71,6 +72,7 @@ jobs:
       - name: data
         run: |
           echo "${{matrix.image_name}}"
-          echo "${{needs.release-prep.outputs.semver}}"
-          echo "${{needs.release-prep.outputs.sha}}"
-          echo "${{needs.release-prep.outputs.release_created}}"
+          echo "semver ${{needs.release-prep.outputs.semver}}"
+          echo "sha ${{needs.release-prep.outputs.sha}}"
+          echo "release_created ${{needs.release-prep.outputs.release_created}}"
+          echo "branch ${{needs.release-prep.outputs.branch}}"
