@@ -31,13 +31,14 @@ jobs:
       - name: Branch Names
         id: branch_names
         uses: tj-actions/branch-names@v5.4
-      
+
       - name: data
         run: |
           echo "semver ${{steps.release.outputs.semver}}"
           echo "sha ${{steps.release.outputs.sha}}"
           echo "release_created ${{steps.release.outputs.release_created}}"
           echo "branch ${{steps.release.outputs.branch}}"
+          echo "branch ${{steps.release.outputs.pr}}"
 
   build:
     name: build
@@ -67,7 +68,7 @@ jobs:
     runs-on: "ubuntu-latest"
     if: ${{ needs.release-prep.outputs.release_created }}
     needs:
-      - release-prep      
+      - release-prep
     strategy:
       matrix:
         app: ["api", "ui-hub"]
