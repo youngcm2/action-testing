@@ -14,52 +14,36 @@ permissions:
 
 jobs:
   release:
-    runs-on: 'ubuntu-latest'    
+    runs-on: "ubuntu-latest"
     outputs:
       semver: ${{steps.release.outputs.major}}.${{steps.release.outputs.minor}}.${{steps.release.outputs.patch}}
       sha: ${{ steps.release.outputs.sha }}
       release_created: ${{ steps.release.outputs.release_created }}
       branch: ${{ steps.branch_names.outputs.current_branch }}
     steps:
-    - uses: google-github-actions/release-please-action@v3
-      name: release-please
-      id: release
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        release-type: node
-        package-name: "@swimlane/marketplace"
-    - name: Branch Names
-      id: branch_names
-      uses: tj-actions/branch-names@v5.4
+      - uses: google-github-actions/release-please-action@v3
+        name: release-please
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          package-name: "@swimlane/marketplace"
+      - name: Branch Names
+        id: branch_names
+        uses: tj-actions/branch-names@v5.4
 
   build:
     name: build
-    runs-on: 'ubuntu-latest'
+    runs-on: "ubuntu-latest"
     needs:
-      - release      
-    if: |      
-      ${{ needs.release.outputs.release_created == false }}    
+      - release
+    if: ${{ !needs.release.outputs.release_created }}
     steps:
-
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: "16"
 
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-  publish:
-    runs-on: 'ubuntu-latest'
-    needs: 
-      - release
-      - build
-    strategy:
-      matrix:
-        app: ['api', 'ui-hub']
-    steps:
-      
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -68,6 +52,26 @@ jobs:
         run: |
           echo "${{matrix.image_name}}"
           echo "${{needs.release.outputs.semver}}"
-          echo "${{needs.release.outputs.sha}}.${{needs.release.outputs.minor}}.${{needs.release.outputs.patch}}"
-      
-      
+          echo "${{needs.release.outputs.sha}}"
+          echo "${{needs.release.outputs.release_created}}"
+
+  publish:
+    runs-on: "ubuntu-latest"
+    if: ${{ needs.release.outputs.release_created }}
+    needs:
+      - release
+      - build
+    strategy:
+      matrix:
+        app: ["api", "ui-hub"]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: data
+        run: |
+          echo "${{matrix.image_name}}"
+          echo "${{needs.release.outputs.semver}}"
+          echo "${{needs.release.outputs.sha}}"
+          echo "${{needs.release.outputs.release_created}}"
