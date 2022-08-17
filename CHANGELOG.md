@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/youngcm2/action-testing/compare/v1.0.0...v1.0.1) (2022-08-17)
+
+
+### Bug Fixes
+
+* update workflow ([ea81069](https://github.com/youngcm2/action-testing/commit/ea8106974ec6367823689450936beba988ebcedb))
+
 ## 1.0.0 (2022-08-17)
 
 
