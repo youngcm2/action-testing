@@ -35,19 +35,19 @@ jobs:
       - uses: actions/github-script@v6
         id: semver
         env:
-          major: ${{steps.release.outputs.major}}
-          minor: ${{steps.release.outputs.minor}}
-          patch: ${{steps.release.outputs.patch}}
-          title: ${{ steps.release.outputs.pr.title}}
+          MAJOR: ${{steps.release.outputs.major}}
+          MINOR: ${{steps.release.outputs.minor}}
+          PATCH: ${{steps.release.outputs.patch}}
+          TITLE: ${{steps.release.outputs.pr.title}}
         with:
           script: |
-            const {major, minor, patch, title} = process.env
-            if(!title){
-              core.setOutput("full", `${major}.${minor}.${patch}`);
+            const {MAJOR, MINOR, PATCH, TITLE} = process.env
+            if(!TITLE){
+              core.setOutput("full", `${MAJOR}.${MINOR}.${PATCH}`);
             } 
             else {
               const regex = /(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(-(?<preRelease>[^+]+))?(\+(?<build>.*))?/
-              const matches = regex.exec(title)
+              const matches = regex.exec(TITLE)
               
               core.info(matches);
               core.setOutput("full", matches[0]);
