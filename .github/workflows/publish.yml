@@ -31,6 +31,13 @@ jobs:
       - name: Branch Names
         id: branch_names
         uses: tj-actions/branch-names@v5.4
+      
+      - name: data
+        run: |
+          echo "semver ${{steps.release.outputs.semver}}"
+          echo "sha ${{steps.release.outputs.sha}}"
+          echo "release_created ${{steps.release.outputs.release_created}}"
+          echo "branch ${{steps.release.outputs.branch}}"
 
   build:
     name: build
