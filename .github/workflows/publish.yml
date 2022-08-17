@@ -13,7 +13,7 @@ permissions:
   packages: write # for publish
 
 jobs:
-  release:
+  release-prep:
     runs-on: "ubuntu-latest"
     outputs:
       semver: ${{steps.release.outputs.major}}.${{steps.release.outputs.minor}}.${{steps.release.outputs.patch}}
