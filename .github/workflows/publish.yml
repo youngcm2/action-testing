@@ -38,6 +38,7 @@ jobs:
 
       - name: Print environment variables
         run: |
+          echo "$GITHUB_CONTEXT"
           echo "CI_REPOSITORY_SLUG=$CI_REPOSITORY_SLUG"
           echo "CI_REPOSITORY_OWNER=$CI_REPOSITORY_OWNER"
           echo "CI_REPOSITORY_OWNER_SLUG=$CI_REPOSITORY_OWNER_SLUG"
@@ -116,6 +117,7 @@ jobs:
 
       - name: data
         run: |
+          echo "$GITHUB_CONTEXT"
           echo "${{matrix.image_name}}"
           echo "semver ${{needs.release-prep.outputs.semver}}"
           echo "sha ${{needs.release-prep.outputs.sha}}"
@@ -137,6 +139,7 @@ jobs:
 
       - name: data
         run: |
+          echo "$GITHUB_CONTEXT"
           echo "${{matrix.image_name}}"
           echo "semver ${{needs.release-prep.outputs.semver}}"
           echo "sha ${{needs.release-prep.outputs.sha}}"
