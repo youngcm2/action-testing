@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.2](https://github.com/youngcm2/action-testing/compare/v1.1.1...v1.1.2) (2022-08-23)
+
+
+### Bug Fixes
+
+* testing ([dfb91cf](https://github.com/youngcm2/action-testing/commit/dfb91cf5d10c279976b206b7c676fab3da5cc24b))
+* testing 1 ([15963e9](https://github.com/youngcm2/action-testing/commit/15963e901da7d843d396811b2fd993781e1783ae))
+
 ## [1.1.1](https://github.com/youngcm2/action-testing/compare/v1.1.0...v1.1.1) (2022-08-17)
 
 
