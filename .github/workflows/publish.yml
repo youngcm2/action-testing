@@ -53,7 +53,7 @@ jobs:
           echo "semver ${{steps.data.outputs.semver}}"
           echo "sha ${{steps.data.outputs.short_sha}}"
           echo "release_created ${{steps.release.outputs.release_created}}"
-          echo "branch ${{steps.branch_names.outputs.branch}}"
+          echo "branch ${{steps.branch_names.outputs.current_branch}}"
 
   build:
     name: build
