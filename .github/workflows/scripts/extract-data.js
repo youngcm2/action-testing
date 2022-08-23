@@ -1,6 +1,6 @@
 module.exports = async ({ context, core }) => {
   const { MAJOR, MINOR, PATCH, PR } = process.env;
-  const { sha, payload } = context.Context;
+  const { sha, payload } = context;
 
   console.log(sha, payload)
 
