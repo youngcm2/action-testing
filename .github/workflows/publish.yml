@@ -37,6 +37,8 @@ jobs:
         uses: FranzDiebold/github-env-vars-action@v2
 
       - name: Print environment variables
+        env: 
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
           echo "CI_REPOSITORY_SLUG=$CI_REPOSITORY_SLUG"
@@ -116,6 +118,8 @@ jobs:
           fetch-depth: 0
 
       - name: data
+        env: 
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
           echo "${{matrix.image_name}}"
@@ -138,6 +142,8 @@ jobs:
           fetch-depth: 0
 
       - name: data
+        env: 
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
           echo "${{matrix.image_name}}"
