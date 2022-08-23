@@ -1,8 +1,8 @@
 module.exports = async ({ context, core }) => {
   const { MAJOR, MINOR, PATCH, PR } = process.env;
-  const { sha, payload } = context;
+  const { sha, payload } = context.Context;
 
-  console.log(context)
+  console.log(sha, payload)
 
   if (PR) {
     const { title } = JSON.parse(PR);
