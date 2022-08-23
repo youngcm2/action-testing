@@ -2,6 +2,8 @@ module.exports = async ({ context, core }) => {
   const { MAJOR, MINOR, PATCH, PR } = process.env;
   const { sha, event } = context;
 
+  console.log(context)
+
   if (PR) {
     const { title } = JSON.parse(PR);
     const regex =
