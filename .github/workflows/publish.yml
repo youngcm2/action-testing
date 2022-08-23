@@ -16,8 +16,8 @@ jobs:
   release-prep:
     runs-on: "ubuntu-latest"
     outputs:
-      semver: ${{steps.semver.outputs.full}}
-      sha: ${{ steps.release.outputs.sha }}
+      semver: ${{steps.data.outputs.semver}}
+      sha: ${{ steps.data.outputs.short_sha }}
       release_created: ${{ steps.release.outputs.release_created }}
       branch: ${{ steps.branch_names.outputs.current_branch }}
     steps:
@@ -31,49 +31,9 @@ jobs:
       - name: Branch Names
         id: branch_names
         uses: tj-actions/branch-names@v5.4
-      
-      - name: GitHub Environment Variables Action
-        id: vars
-        uses: FranzDiebold/github-env-vars-action@v2
-
-      - name: Print environment variables
-        env: 
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: |
-          echo "$GITHUB_CONTEXT"
-          echo "CI_REPOSITORY_SLUG=$CI_REPOSITORY_SLUG"
-          echo "CI_REPOSITORY_OWNER=$CI_REPOSITORY_OWNER"
-          echo "CI_REPOSITORY_OWNER_SLUG=$CI_REPOSITORY_OWNER_SLUG"
-          echo "CI_REPOSITORY_NAME=$CI_REPOSITORY_NAME"
-          echo "CI_REPOSITORY_NAME_SLUG=$CI_REPOSITORY_NAME_SLUG"
-          echo "CI_REPOSITORY=$CI_REPOSITORY"
-          echo "CI_REF_SLUG=$CI_REF_SLUG"
-          echo "CI_ACTION_REF_NAME=$CI_ACTION_REF_NAME"
-          echo "CI_ACTION_REF_NAME_SLUG=$CI_ACTION_REF_NAME_SLUG"
-          echo "CI_REF_NAME=$CI_REF_NAME"
-          echo "CI_REF_NAME_SLUG=$CI_REF_NAME_SLUG"
-          echo "CI_REF=$CI_REF"
-          echo "CI_HEAD_REF_SLUG=$CI_HEAD_REF_SLUG"
-          echo "CI_HEAD_REF=$CI_HEAD_REF"
-          echo "CI_BASE_REF_SLUG=$CI_BASE_REF_SLUG"
-          echo "CI_BASE_REF=$CI_BASE_REF"
-          echo "CI_SHA_SHORT=$CI_SHA_SHORT"
-          echo "CI_SHA=$CI_SHA"
-          echo "CI_PR_SHA_SHORT=$CI_PR_SHA_SHORT"
-          echo "CI_PR_SHA=$CI_PR_SHA"
-          echo "CI_PR_NUMBER=$CI_PR_NUMBER"
-          echo "CI_PR_ID=$CI_PR_ID"
-          echo "CI_PR_TITLE=$CI_PR_TITLE"
-          echo "CI_PR_DESCRIPTION=$CI_PR_DESCRIPTION"
-          echo "CI_ACTOR=$CI_ACTOR"
-          echo "CI_EVENT_NAME=$CI_EVENT_NAME"
-          echo "CI_RUN_ID=$CI_RUN_ID"
-          echo "CI_RUN_NUMBER=$CI_RUN_NUMBER"
-          echo "CI_WORKFLOW=$CI_WORKFLOW"
-          echo "CI_ACTION=$CI_ACTION"
 
       - uses: actions/github-script@v6
-        id: semver
+        id: data
         env:
           MAJOR: ${{steps.release.outputs.major}}
           MINOR: ${{steps.release.outputs.minor}}
@@ -82,24 +42,28 @@ jobs:
         with:
           script: |
             const {MAJOR, MINOR, PATCH, PR} = process.env
+            const {sha, event} = context
+
             if(PR){
               const {title} = JSON.parse(PR)
               const regex = /(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(-(?<preRelease>[^+]+))?(\+(?<build>.*))?/
               const matches = regex.exec(title)
               
               core.info(matches);
-              core.setOutput("full", matches[0]);
+              core.setOutput("semver", matches[0]);
+              core.setOutput("short_sha", sha.substring(0, 7))
             }
             else{
-              core.setOutput("full", `${MAJOR}.${MINOR}.${PATCH}`);
-            } 
+              core.setOutput("semver", `${MAJOR}.${MINOR}.${PATCH}`);
+              core.setOutput("short_sha", event.before.substring(0, 7))
+            }
 
-      - name: data        
+      - name: data
         run: |
-          echo "semver ${{steps.semver.outputs.full}}"
+          echo "semver ${{steps.data.outputs.semver}}"
           echo "sha ${{steps.release.outputs.sha}}"
           echo "release_created ${{steps.release.outputs.release_created}}"
-          echo "branch ${{steps.release.outputs.branch}}"          
+          echo "branch ${{steps.release.outputs.branch}}"
 
   build:
     name: build
@@ -118,7 +82,7 @@ jobs:
           fetch-depth: 0
 
       - name: data
-        env: 
+        env:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
@@ -142,7 +106,7 @@ jobs:
           fetch-depth: 0
 
       - name: data
-        env: 
+        env:
           GITHUB_CONTEXT: ${{ toJSON(github) }}
         run: |
           echo "$GITHUB_CONTEXT"
