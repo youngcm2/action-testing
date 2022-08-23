@@ -21,6 +21,10 @@ jobs:
       release_created: ${{ steps.release.outputs.release_created }}
       branch: ${{ steps.branch_names.outputs.current_branch }}
     steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - uses: google-github-actions/release-please-action@v3
         name: release-please
         id: release
@@ -39,7 +43,7 @@ jobs:
           MINOR: ${{steps.release.outputs.minor}}
           PATCH: ${{steps.release.outputs.patch}}
           PR: ${{steps.release.outputs.pr}}
-        with:          
+        with:
           script: |
             const script = require('./.github/workflows/scripts/extract-data.js')
             await script({context, core})
