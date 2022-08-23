@@ -32,6 +32,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
           package-name: "@swimlane/marketplace"
+          include-v-in-tag: false
       - name: Branch Names
         id: branch_names
         uses: tj-actions/branch-names@v5.4
