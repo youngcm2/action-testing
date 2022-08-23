@@ -1,6 +1,6 @@
 module.exports = async ({ context, core }) => {
   const { MAJOR, MINOR, PATCH, PR } = process.env;
-  const { sha, event } = context;
+  const { sha, payload } = context;
 
   console.log(context)
 
@@ -15,6 +15,6 @@ module.exports = async ({ context, core }) => {
     core.setOutput("short_sha", sha.substring(0, 7));
   } else {
     core.setOutput("semver", `${MAJOR}.${MINOR}.${PATCH}`);
-    core.setOutput("short_sha", event.before.substring(0, 7));
+    core.setOutput("short_sha", payload.before.substring(0, 7));
   }
 };
