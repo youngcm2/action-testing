@@ -44,6 +44,7 @@ jobs:
           MINOR: ${{steps.release.outputs.minor}}
           PATCH: ${{steps.release.outputs.patch}}
           PR: ${{steps.release.outputs.pr}}
+          TEST: ${{fromJSON(steps.release.outputs)}}
         with:
           script: |
             const script = require('./.github/workflows/scripts/extract-data.js')
