@@ -30,7 +30,7 @@ jobs:
         name: release-please
         id: release
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PRIVATE_GITHUB_TOKEN }}
           release-type: node
           package-name: "@swimlane/marketplace"
           include-v-in-tag: false
@@ -53,7 +53,7 @@ jobs:
           MINOR: ${{steps.release.outputs.minor}}
           PATCH: ${{steps.release.outputs.patch}}
           PR: ${{steps.release.outputs.pr}}
-          RELEASE_CREATED: ${{ steps.release.outputs.release_created }}          
+          RELEASE_CREATED: ${{ steps.release.outputs.release_created }}
         with:
           script: |
             const script = require('./.github/workflows/scripts/extract-data.js')
