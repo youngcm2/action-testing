@@ -1,4 +1,4 @@
-name: Marketplace Publish (Dev)
+name: Release
 
 on:
   release:
