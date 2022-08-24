@@ -17,7 +17,7 @@ module.exports = async ({ context, core }) => {
     core.info(matches);
     core.setOutput("semver", matches[0]);
     core.setOutput("short_sha", sha.substring(0, 7));
-
+    
     return
   } 
 

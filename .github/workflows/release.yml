@@ -1,0 +1,40 @@
+name: Marketplace Publish (Dev)
+
+on:
+  release:
+    types:
+      - released
+
+permissions:
+  contents: write # for checkout and tag
+  actions: write # updating envs
+  pull-requests: write # for comments
+  packages: write # for publish
+
+jobs:  
+  publish:
+    runs-on: "ubuntu-latest"        
+    strategy:
+      matrix:
+        app: ["api", "ui-hub"]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            console.log(context)
+
+
+      # - name: data
+      #   env:
+      #     GITHUB_CONTEXT: ${{ toJSON(github) }}
+      #   run: |
+      #     echo "$GITHUB_CONTEXT"
+      #     echo "${{matrix.image_name}}"
+      #     echo "semver ${{needs.release-prep.outputs.semver}}"
+      #     echo "sha ${{needs.release-prep.outputs.sha}}"
+      #     echo "release_created ${{needs.release-prep.outputs.release_created}}"
+      #     echo "branch ${{needs.release-prep.outputs.branch}}"

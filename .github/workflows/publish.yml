@@ -20,6 +20,7 @@ jobs:
       sha: ${{ steps.data.outputs.short_sha }}
       release_created: ${{ steps.release.outputs.release_created }}
       branch: ${{ steps.branch_names.outputs.current_branch }}
+      has_pr: ${{ steps.data.outputs.has_pr }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -52,8 +53,7 @@ jobs:
           MINOR: ${{steps.release.outputs.minor}}
           PATCH: ${{steps.release.outputs.patch}}
           PR: ${{steps.release.outputs.pr}}
-          RELEASE_CREATED: ${{ steps.release.outputs.release_created }}
-          VERSION: ${{ steps.pjson.outputs.version }}
+          RELEASE_CREATED: ${{ steps.release.outputs.release_created }}          
         with:
           script: |
             const script = require('./.github/workflows/scripts/extract-data.js')
@@ -93,26 +93,26 @@ jobs:
           echo "release_created ${{needs.release-prep.outputs.release_created}}"
           echo "branch ${{needs.release-prep.outputs.branch}}"
 
-  publish:
-    runs-on: "ubuntu-latest"
-    if: ${{ needs.release-prep.outputs.release_created }}
-    needs:
-      - release-prep
-    strategy:
-      matrix:
-        app: ["api", "ui-hub"]
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+  # publish:
+  #   runs-on: "ubuntu-latest"
+  #   if: ${{ needs.release-prep.outputs.release_created }}
+  #   needs:
+  #     - release-prep
+  #   strategy:
+  #     matrix:
+  #       app: ["api", "ui-hub"]
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
 
-      - name: data
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: |
-          echo "$GITHUB_CONTEXT"
-          echo "${{matrix.image_name}}"
-          echo "semver ${{needs.release-prep.outputs.semver}}"
-          echo "sha ${{needs.release-prep.outputs.sha}}"
-          echo "release_created ${{needs.release-prep.outputs.release_created}}"
-          echo "branch ${{needs.release-prep.outputs.branch}}"
+  #     - name: data
+  #       env:
+  #         GITHUB_CONTEXT: ${{ toJSON(github) }}
+  #       run: |
+  #         echo "$GITHUB_CONTEXT"
+  #         echo "${{matrix.image_name}}"
+  #         echo "semver ${{needs.release-prep.outputs.semver}}"
+  #         echo "sha ${{needs.release-prep.outputs.sha}}"
+  #         echo "release_created ${{needs.release-prep.outputs.release_created}}"
+  #         echo "branch ${{needs.release-prep.outputs.branch}}"
