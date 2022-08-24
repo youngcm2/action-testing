@@ -1,8 +1,12 @@
 module.exports = async ({ context, core }) => {
-  const { MAJOR, MINOR, PATCH, PR, TEST } = process.env;
+  const { MAJOR, MINOR, PATCH, PR, RELEASE_CREATED, VERSION } = process.env;
   const { sha, payload } = context;
 
-  console.log(TEST)
+  if(RELEASE_CREATED){
+    core.setOutput("semver", `${MAJOR}.${MINOR}.${PATCH}`);
+    core.setOutput("short_sha", payload.before.substring(0, 7));
+    return
+  }
 
   if (PR) {
     const { title } = JSON.parse(PR);
@@ -13,8 +17,13 @@ module.exports = async ({ context, core }) => {
     core.info(matches);
     core.setOutput("semver", matches[0]);
     core.setOutput("short_sha", sha.substring(0, 7));
-  } else {
-    core.setOutput("semver", `${MAJOR}.${MINOR}.${PATCH}`);
-    core.setOutput("short_sha", payload.before.substring(0, 7));
-  }
+
+    return
+  } 
+
+  //fallback
+
+  core.setOutput("semver", VERSION);
+  core.setOutput("short_sha", sha.substring(0, 7));
+  
 };

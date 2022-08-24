@@ -33,9 +33,17 @@ jobs:
           release-type: node
           package-name: "@swimlane/marketplace"
           include-v-in-tag: false
+
       - name: Branch Names
         id: branch_names
         uses: tj-actions/branch-names@v5.4
+
+      - name: Load package info
+        if: ${{ !needs.release-prep.outputs.release_created }}
+        id: pjson
+        uses: zoexx/github-action-json-file-properties@release
+        with:
+          file_path: "package.json"
 
       - uses: actions/github-script@v6
         id: data
@@ -44,7 +52,8 @@ jobs:
           MINOR: ${{steps.release.outputs.minor}}
           PATCH: ${{steps.release.outputs.patch}}
           PR: ${{steps.release.outputs.pr}}
-          TEST: ${{steps.release.outputs}}
+          RELEASE_CREATED: ${{ steps.release.outputs.release_created }}
+          VERSION: ${{ steps.pjson.outputs.version }}
         with:
           script: |
             const script = require('./.github/workflows/scripts/extract-data.js')
