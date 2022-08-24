@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/youngcm2/action-testing/compare/1.3.3...1.4.0) (2022-08-24)
+
+
+### Features
+
+* release testing ([7d4654a](https://github.com/youngcm2/action-testing/commit/7d4654a7ef30e7ea3303c7c55e9f4ce0303a4d0f))
+
 ## [1.3.3](https://github.com/youngcm2/action-testing/compare/1.3.2...1.3.3) (2022-08-24)
 
 
